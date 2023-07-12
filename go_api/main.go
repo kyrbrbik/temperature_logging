@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"fmt"
+	"time"
 	"github.com/go-sql-driver/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -21,6 +22,7 @@ type Data struct {
 func main() {
 	loadDB()
 	r := gin.Default()
+	r.Use(logTimestamp())
 	r.GET("/data", getData)
 	r.POST("/data", addData)
 	r.Run(":8080")
@@ -56,6 +58,14 @@ func addData(c *gin.Context) {
 		return
 	}
 
+	timestamp, exists := c.Get("Time")
+	if !exists { 
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Timestamp not found"})
+	}
+
+	newData.Time = fmt.Sprintf("%v", timestamp.(int64))
+	
+
 	err := writeDB(newData)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -76,12 +86,7 @@ func writeDB(data Data) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	id err := res.LastInsertId()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Inserted row ID:", id)
+	fmt.Println(res)
 	return nil
 }
 
@@ -103,5 +108,13 @@ func getData(c *gin.Context) {
 	err = rows.Err()
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func logTimestamp() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		timestamp := time.Now().Unix()
+		c.Set("Time", timestamp)
+		c.Next()
 	}
 }
