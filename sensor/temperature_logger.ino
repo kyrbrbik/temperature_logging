@@ -11,7 +11,7 @@ const char* password = "cajsrumem";
 
 DHT dht(DHTPIN, DHTTYPE);
 
-const char* serverName = "http://192.168.0.200:6969";
+const char* serverName = "http://192.168.0.155:8080/data";
 unsigned long lastTime = 0;
 unsigned long timerDelay = 10000;
 
@@ -44,7 +44,7 @@ void loop () {
 			http.begin(client, serverName);
 
 			http.addHeader("Content-Type", "application/json");
-			int httpResponseCode = http.POST("{\"temperature\": " + String(t) + ", \"humidity\": " + String(h) + "}");
+			int httpResponseCode = http.POST("{\"temperature\": \"" + String(t) + "\", \"humidity\": \"" + String(h) + "\"}");
 
 			Serial.print("HTTP Response code: ");
 			Serial.println(httpResponseCode);
