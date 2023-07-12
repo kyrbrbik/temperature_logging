@@ -24,7 +24,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	initTable()
+	if err := initTable(); err != nil {
+		log.Fatal(err)
+	}
+
 	r := gin.Default()
 	r.Use(logTimestamp())
 	r.GET("/data", getData)
@@ -130,7 +133,7 @@ func logTimestamp() gin.HandlerFunc {
 	}
 }
 
-func initTable() {
+func initTable() error{
 	stmt, err := db.Prepare("CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTO_INCREMENT, temperature FLOAT, humidity FLOAT, time INT)")
 	if err != nil {
 		log.Fatal(err)
@@ -142,4 +145,5 @@ func initTable() {
 		log.Fatal(err)
 	}
 	fmt.Println(res)
+	return err
 }
