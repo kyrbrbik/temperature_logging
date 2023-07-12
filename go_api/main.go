@@ -20,7 +20,10 @@ type Data struct {
 }
 
 func main() {
-	loadDB()
+	if err := loadDB(); err != nil {
+		log.Fatal(err)
+	}
+
 	r := gin.Default()
 	r.Use(logTimestamp())
 	r.GET("/data", getData)
@@ -28,7 +31,7 @@ func main() {
 	r.Run(":8080")
 }
 
-func loadDB() {
+func loadDB() error{
 	cfg := mysql.Config{
 		User:   "root",
 		Passwd: "password",
@@ -36,18 +39,25 @@ func loadDB() {
 		Addr:   "localhost:3306",
 		DBName: "sensor",
 	}
-
+	
 	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
+	maxRetries := 10
+	retryInterval := 5 * time.Second
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
+	for retries :=0; retries < maxRetries; retries++ {
+		db, err = sql.Open("mysql", cfg.FormatDSN())
+		if err != nil {
+			log.Println(err)
+			time.Sleep(retryInterval)
+		}
+
+		pingErr := db.Ping()
+		if pingErr != nil {
+			log.Println(pingErr)
+			time.Sleep(retryInterval)
+		}
 	}
-	fmt.Println("Connected!")
+	return err
 }
 
 func addData(c *gin.Context) {
@@ -87,7 +97,7 @@ func writeDB(data Data) error {
 		log.Fatal(err)
 	}
 	fmt.Println(res)
-	return nil
+	return err
 }
 
 func getData(c *gin.Context) {
