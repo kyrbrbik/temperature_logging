@@ -6,6 +6,7 @@ import (
 	"log"
 	"fmt"
 	"time"
+	"os"
 	"github.com/go-sql-driver/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -37,10 +38,10 @@ func main() {
 
 func loadDB() error{
 	cfg := mysql.Config{
-		User:   "root",
-		Passwd: "password",
+		User:   os.Getenv("MYSQL_USER"),
+		Passwd: os.Getenv("MYSQL_PASSWORD"),
 		Net:    "tcp",
-		Addr:   "localhost:3306",
+		Addr:   os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT"),
 		DBName: "sensor",
 	}
 	
