@@ -4,7 +4,7 @@ COPY go_api/. .
 RUN go mod download
 RUN go build -o main .
 
-FROM alpine:3.18.2
+FROM debian:11-slim
 WORKDIR /app
 COPY --from=builder /app/main .
 EXPOSE 8080
