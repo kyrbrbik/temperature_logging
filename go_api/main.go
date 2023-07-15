@@ -33,6 +33,7 @@ func main() {
 	r.Use(logTimestamp())
 	r.GET("/data", getData)
 	r.POST("/data", addData)
+	r.GET("/data/last", getLastTempetature)
 	r.Run(":8080")
 }
 
@@ -124,6 +125,15 @@ func getData(c *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getLastTempetature(c *gin.Context) {
+	var data Data
+	err := db.QueryRow("SELECT * FROM data ORDER BY id DESC LIMIT 1").Scan(&data.ID, &data.Temperature, &data.Humidity, &data.Time)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.JSON(http.StatusOK, gin.H{"data": data})
 }
 
 func logTimestamp() gin.HandlerFunc {
