@@ -63,7 +63,7 @@ func loadDB() error{
 			time.Sleep(retryInterval)
 		}
 	}
-	return err
+	return fmt.Errorf("couldn't connect to database: %v", err)
 }
 
 func addData(c *gin.Context) {
@@ -94,13 +94,13 @@ func addData(c *gin.Context) {
 func writeDB(data Data) error {
 	stmt, err := db.Prepare("INSERT INTO data (temperature, humidity, time) VALUES (?, ?, ?)")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("couldn't prepare statement: %v", err)
 	}
 	defer stmt.Close()
 
 	res, err := stmt.Exec(data.Temperature, data.Humidity, data.Time)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("couldn't execute statement: %v", err)
 	}
 	fmt.Println(res)
 	return err
@@ -147,13 +147,13 @@ func logTimestamp() gin.HandlerFunc {
 func initTable() error{
 	stmt, err := db.Prepare("CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTO_INCREMENT, temperature FLOAT, humidity FLOAT, time INT)")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("couldn't prepare init statement: %v", err)
 	}
 	defer stmt.Close()
 
 	res, err := stmt.Exec()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("couldn't execute init statement: %v", err)
 	}
 	fmt.Println(res)
 	return err
