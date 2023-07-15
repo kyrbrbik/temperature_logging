@@ -63,7 +63,8 @@ func loadDB() error{
 			time.Sleep(retryInterval)
 		}
 	}
-	return fmt.Errorf("couldn't connect to database: %v", err)
+	return err
+	//return fmt.Errorf("couldn't connect to database: %v", err)
 }
 
 func addData(c *gin.Context) {
