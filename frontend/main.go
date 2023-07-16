@@ -69,18 +69,6 @@ func indexHandler(c *gin.Context) {
 
 func isHot(temp string) string {
 
-//	var result map[string]Data
-//	err := json.Unmarshal([]byte(temp), &result)
-//	if err != nil {
-//		fmt.Println("Error: ", err)
-//	}
-//
-//	temperature := result["data"].Temperature
-//	floatTemp, err := strconv.ParseFloat(temperature, 64)
-//	if err != nil {
-//		fmt.Println("Error isHot: ", err)
-//	}
-
 	floatTemp, err := strconv.ParseFloat(temp, 64)
 	if err != nil {
 		fmt.Println("Error isHot: ", err)
