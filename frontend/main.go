@@ -24,8 +24,8 @@ func main() {
 }
 
 func fetchAPI() (string, error) {
-	//url := "http://temperature-api.default.svc.cluster.local:8080/data/last"
-	url := "http://127.0.0.1:8080/data/last"
+	url := "http://temperature-api.default.svc.cluster.local:8080/data/last"
+	//url := "http://127.0.0.1:8080/data/last"
 
 	resp, err := http.Get(url)
 	if err != nil {
