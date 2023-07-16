@@ -11,6 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Data struct {
+	ID int `json:"id"`
+	Temperature string `json:"temperature"`
+	Humidity string `json:"humidity"`
+	Time string `json:"time"`
+}
 
 func main() {
 
@@ -41,36 +47,14 @@ func fetchAPI() (string, error) {
 	return string(body), err
 }
 
-func frontend() {
-	
-	data, err := fetchAPI()
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-
-	// parse value from json
-	var result float64
-	json.Unmarshal([]byte(data), &result)
-	fmt.Println("Result: ", result)
-
-	if result > 30 {
-		fmt.Println("Hot")
-	} else {
-		fmt.Println("Cold")
-	}
-}
-
 func html(w http.ResponseWriter, result float64) {
 	tmpl := template.Must(template.ParseFiles("index.html"))
 	tmpl.Execute(w, result)
 }
 
 func indexHandler(c *gin.Context) {
-	result, err := fetchAPI()
+	result := getTemp()
 	hot := isHot(result)
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
 	data := struct {
 		Title string
 		Result string
@@ -84,13 +68,6 @@ func indexHandler(c *gin.Context) {
 }
 
 func isHot(temp string) string {
-
-	type Data struct {
-		ID int `json:"id"`
-		Temperature string `json:"temperature"`
-		Humidity string `json:"humidity"`
-		Time string `json:"time"`
-	}
 
 	var result map[string]Data
 	err := json.Unmarshal([]byte(temp), &result)
@@ -110,3 +87,21 @@ func isHot(temp string) string {
 		return "Hot as fuck"
 	}
 }
+
+func getTemp() string {
+	
+	data, err := fetchAPI()
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	var result map[string]Data
+	err2 := json.Unmarshal([]byte(data), &result) 
+	if err2 != nil {
+		fmt.Println("Error: ", err)
+	}
+	temperature := result["data"].Temperature
+
+	return temperature
+}
+
+
