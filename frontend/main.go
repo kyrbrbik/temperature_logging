@@ -84,18 +84,26 @@ func indexHandler(c *gin.Context) {
 }
 
 func isHot(temp string) string {
-	type Temperature struct {
-		Temp string `json:"temp"`
+
+	type Data struct {
+		ID int `json:"id"`
+		Temperature string `json:"temperature"`
+		Humidity string `json:"humidity"`
+		Time string `json:"time"`
 	}
-	err := json.Unmarshal([]byte(temp), &temp)
+
+	var result map[string]Data
+	err := json.Unmarshal([]byte(temp), &result)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
-	unmarshalTemp := Temperature{temp}
-	floatTemp, err := strconv.ParseFloat(unmarshalTemp.Temp, 64)
+
+	temperature := result["data"].Temperature
+	floatTemp, err := strconv.ParseFloat(temperature, 64)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
+
 	if floatTemp <= 29.9 {
 		return "Not as hot"
 	} else {
