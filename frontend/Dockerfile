@@ -8,6 +8,7 @@ COPY ./templates .
 FROM debian:11-slim
 WORKDIR /app
 COPY --from=builder /app/main .
+COPY --from=builder /app/templates ./templates
 EXPOSE 8090
 CMD ["./main"]
 
