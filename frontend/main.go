@@ -23,6 +23,8 @@ func main() {
 	r := gin.Default()
 
 	r.LoadHTMLGlob("templates/*")
+	
+	r.Static("/static", "./static")
 
 	r.GET("/", indexHandler)
 
@@ -59,10 +61,12 @@ func indexHandler(c *gin.Context) {
 		Title string
 		Result string
 		Hot string
+		ImagePath string
 	}{
 		Title: "Temperature",
 		Result: result,
 		Hot: hot,
+		ImagePath: "/static/images/thisisfine.jpg",
 	}
 	c.HTML(http.StatusOK, "index.html", data)
 }
