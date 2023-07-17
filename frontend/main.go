@@ -64,7 +64,7 @@ func indexHandler(c *gin.Context) {
 		ImagePath string
 	}{
 		Title: "Temperature",
-		Result: result,
+		Result: result + "°C",
 		Hot: hot,
 		ImagePath: "/static/images/thisisfine.jpg",
 	}
