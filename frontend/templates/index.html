@@ -27,15 +27,19 @@
 	<div class="flex justify-center">
 	<p> {{ .Hot }} </p>
 	</div>
-	<div class="flex justify-center sticky top-0">
+	<div class="flex justify-center">
 	<img src= "{{ .ImagePath }}" alt="This is fine">
 	</div>
-	<div class="h-screen">
+	<div class="h-96">
 		<p hx-get="/scroll"
 		hx-trigger="revealed"
 		hx-swap="afterend"
+		hx-target="#scroll"
 		>
+		<p>test</p>
 		</p>
+	</div>
+	<div id = "scroll" class="flex justify-center">
 	</div>
 	</body>
 </html>

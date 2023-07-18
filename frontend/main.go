@@ -115,6 +115,7 @@ func refreshTemperature(c *gin.Context) {
 
 func infiniteScroll(c *gin.Context) {
 	time.Sleep(1 *time.Second)	
-	newResult := `<div class="h-screen"><p hx-get="/scroll" hx-trigger="revealed" hx-swap="afterend"></p></div><div><img class="htmx-indicator" width="60" src="/static/bars.svg"</div>`
-	c.String(http.StatusOK, newResult)
+	newResult := `<div class="h-96 block"><p hx-get="/scroll" hx-trigger="revealed" hx-swap="afterend">test_http</p></div>` 
+	animation := ` <div class="content-center"><img class="htmx-indicator" width="60" src="/static/bars.svg" alt="where the fuck is this"></div>` 
+	c.String(http.StatusOK, newResult, animation)
 }
