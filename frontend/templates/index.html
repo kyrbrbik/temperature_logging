@@ -1,12 +1,19 @@
 <html>
 <head>
 	<title> {{ .Title }} </title>
+	<script src="https://unpkg.com/htmx.org@1.9.3" integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua" crossorigin="anonymous"></script>
 </head>
 
 <body>
 	<h1> {{ .Title }} </h1>
 	<p> {{ .Result }} </p>
+	<p> {{ .Refresh }} </p>
+	<button hx-get="/refresh">
+		Refresh
+		<img class="htmx-indicator" src="/static/oval.svg" style="display: none;">
+	</button>
 	<p> {{ .Hot }} </p>
-	<img src= "{{ .ImagePath }}" alt="This is fine"></a>
+	<img src= "{{ .ImagePath }}" alt="This is fine">
 </body>
+</html>
 

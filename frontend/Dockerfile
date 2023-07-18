@@ -10,7 +10,7 @@ FROM debian:11-slim
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/static/images ./static/images
+COPY --from=builder /app/static/ ./static/
 EXPOSE 8090
 CMD ["./main"]
 

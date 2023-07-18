@@ -28,6 +28,8 @@ func main() {
 
 	r.GET("/", indexHandler)
 
+	r.GET("/refresh", refreshTemperature)
+
 	r.Run(":8090")
 }
 
@@ -101,4 +103,12 @@ func getTemp() string {
 	return temperature
 }
 
+func refreshTemperature(c *gin.Context) {
+
+	result, err := fetchAPI()
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	c.String(http.StatusOK, result)
+}
 
