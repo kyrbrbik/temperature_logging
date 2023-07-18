@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -65,7 +66,7 @@ func indexHandler(c *gin.Context) {
 		Hot string
 		ImagePath string
 	}{
-		Title: "Temperature",
+		Title: "Je u Honzy vedro?",
 		Result: result + "°C",
 		Hot: hot,
 		ImagePath: "/static/images/thisisfine.jpg",
@@ -105,10 +106,8 @@ func getTemp() string {
 
 func refreshTemperature(c *gin.Context) {
 
-	result, err := fetchAPI()
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-	c.String(http.StatusOK, result)
+	result := getTemp()
+	time.Sleep(2 *time.Second) //for dramatic effect
+	c.String(http.StatusOK, result + "°C")
 }
 

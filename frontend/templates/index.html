@@ -6,11 +6,17 @@
 
 <body>
 	<h1> {{ .Title }} </h1>
+	<div id="refresh">
 	<p> {{ .Result }} </p>
-	<p> {{ .Refresh }} </p>
-	<button hx-get="/refresh">
+	</div>
+	<button hx-get="/refresh"
+		hx-target="#refresh"
+		hx-swap="innerHTML"
+		>
 		Refresh
-		<img class="htmx-indicator" src="/static/oval.svg" style="display: none;">
+		<img class="htmx-indicator" 
+		src="/static/oval.svg" 
+		>
 	</button>
 	<p> {{ .Hot }} </p>
 	<img src= "{{ .ImagePath }}" alt="This is fine">
