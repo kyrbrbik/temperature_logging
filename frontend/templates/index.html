@@ -5,7 +5,7 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-r from-violet-400 to-blue-500 ">
+<body class="bg-gradient-to-r from-violet-400 to-blue-500 " >
 	<div class="flex justify-center">
 		<h1 class="text-6xl"> {{ .Title }} </h1>
 	</div>
@@ -27,8 +27,15 @@
 	<div class="flex justify-center">
 	<p> {{ .Hot }} </p>
 	</div>
-	<div class="flex justify-center">
+	<div class="flex justify-center sticky top-0">
 	<img src= "{{ .ImagePath }}" alt="This is fine">
+	</div>
+	<div class="h-screen">
+		<p hx-get="/scroll"
+		hx-trigger="revealed"
+		hx-swap="afterend"
+		>
+		</p>
 	</div>
 	</body>
 </html>
