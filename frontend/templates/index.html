@@ -5,11 +5,10 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-	<div class="bg-gradient-to-r from-violet-400 to-blue-500 ">
-		<div class="flex justify-center">
-			<h1 class="text-6xl"> {{ .Title }} </h1>
-		</div>
+<body class="bg-gradient-to-r from-violet-400 to-blue-500 ">
+	<div class="flex justify-center">
+		<h1 class="text-6xl"> {{ .Title }} </h1>
+	</div>
 	<div id="refresh" class="flex justify-center">
 	<p> {{ .Result }} </p>
 	</div>
@@ -30,7 +29,6 @@
 	</div>
 	<div class="flex justify-center">
 	<img src= "{{ .ImagePath }}" alt="This is fine">
-	</div>
 	</div>
 	</body>
 </html>
