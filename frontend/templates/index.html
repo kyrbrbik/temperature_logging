@@ -35,12 +35,13 @@
 	<div class="h-96">
 		<p hx-get="/scroll"
 		hx-trigger="revealed"
-		hx-swap="afterend"
+		hx-swap="outerHTML"
 		hx-target="#scroll"
+		hx-swap-oob="true"
 		>
 		</p>
 	</div>
-	<div id = "scroll" class="flex justify-center">
+	<div id="scroll" class="flex justify-center h-screen">
 	</div>
 	</body>
 </html>
