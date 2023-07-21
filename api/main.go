@@ -31,10 +31,20 @@ func main() {
 
 	r := gin.Default()
 	r.Use(logTimestamp())
+	r.GET("/health", health)
 	r.GET("/data", getData)
 	r.POST("/data", addData)
 	r.GET("/data/last", getLastTempetature)
 	r.Run(":8080")
+}
+
+func health(c *gin.Context) {
+	if err := db.Ping(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
 func loadDB() error{
