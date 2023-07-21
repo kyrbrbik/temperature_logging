@@ -6,7 +6,7 @@ COPY ./static/images ./static/images
 WORKDIR /app/templates
 COPY ./templates .
 
-FROM debian:11-slim
+FROM cgr.dev/chainguard/wolfi-base:latest
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/templates ./templates

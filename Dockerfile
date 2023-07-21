@@ -4,7 +4,7 @@ COPY go_api/. .
 RUN go mod download
 RUN go build -o main .
 
-FROM debian:11-slim
+FROM cgr.dev/chainguard/wolfi-base:latest
 WORKDIR /app
 COPY --from=builder /app/main .
 EXPOSE 8080
