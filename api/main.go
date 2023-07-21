@@ -74,7 +74,6 @@ func loadDB() error{
 		}
 	}
 	return err
-	//return fmt.Errorf("couldn't connect to database: %v", err)
 }
 
 func addData(c *gin.Context) {
