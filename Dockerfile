@@ -1,6 +1,6 @@
 FROM golang:1.20.5-alpine AS builder
 WORKDIR /app
-COPY go_api/. .
+COPY api/. .
 RUN go mod download
 RUN go build -o main .
 
