@@ -1,0 +1,22 @@
+version: "3"
+services:
+  api:
+    image: temperature:0.1
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=test
+      - MYSQL_PORT=3306
+  db:
+    image: mysql:8-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=sensor
+    ports:
+      - "3306:3306"
+  ui:
+    image: temperature-ui:0.1
+    ports:
+      - "8090:8090"
