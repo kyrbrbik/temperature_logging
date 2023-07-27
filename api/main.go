@@ -53,7 +53,7 @@ func loadDB() error{
 		Passwd: os.Getenv("MYSQL_PASSWORD"),
 		Net:    "tcp",
 		Addr:   os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT"),
-		DBName: "sensor",
+		DBName: os.Getenv("MYSQL_DATABASE"),
 	}
 	
 	var err error
