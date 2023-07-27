@@ -23,3 +23,7 @@ go.work
 # Exlude test python server
 *.py
 Makefile
+
+# Exclude sensor code
+sensor/
+
