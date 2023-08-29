@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
+	"fmt"
 	"html/template"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -13,10 +13,10 @@ import (
 )
 
 type Data struct {
-	ID int `json:"id"`
+	ID          int    `json:"id"`
 	Temperature string `json:"temperature"`
-	Humidity string `json:"humidity"`
-	Time string `json:"time"`
+	Humidity    string `json:"humidity"`
+	Time        string `json:"time"`
 }
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 	r := gin.Default()
 
 	r.LoadHTMLGlob("templates/*")
-	
+
 	r.Static("/static", "./static")
 
 	r.GET("/", indexHandler)
@@ -41,7 +41,7 @@ func fetchAPI() (string, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error: ", err)	
+		fmt.Println("Error: ", err)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -62,14 +62,14 @@ func indexHandler(c *gin.Context) {
 	result := getTemp()
 	hot := isHot(result)
 	data := struct {
-		Title string
-		Result string
-		Hot string
+		Title     string
+		Result    string
+		Hot       string
 		ImagePath string
 	}{
-		Title: "Je u Honzy vedro?",
-		Result: result + "°C",
-		Hot: hot,
+		Title:     "Je u Honzy vedro?",
+		Result:    result + "°C",
+		Hot:       hot,
 		ImagePath: "/static/images/thisisfine.jpg",
 	}
 	c.HTML(http.StatusOK, "index.html", data)
@@ -90,13 +90,13 @@ func isHot(temp string) string {
 }
 
 func getTemp() string {
-	
+
 	data, err := fetchAPI()
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 	var result map[string]Data
-	err2 := json.Unmarshal([]byte(data), &result) 
+	err2 := json.Unmarshal([]byte(data), &result)
 	if err2 != nil {
 		fmt.Println("Error getTemp: ", err)
 	}
@@ -108,12 +108,12 @@ func getTemp() string {
 func refreshTemperature(c *gin.Context) {
 
 	result := getTemp()
-	time.Sleep(2 *time.Second) //for dramatic effect
-	c.String(http.StatusOK, result + "°C")
+	time.Sleep(2 * time.Second) //for dramatic effect
+	c.String(http.StatusOK, result+"°C")
 }
 
 func infiniteScroll(c *gin.Context) {
-	time.Sleep(1 *time.Second)	
-	newResult := `<div class="h-96 block text-center"><img class="htmx-indicator mx-auto" width="60" height="96" src="/static/bars.svg" alt="where the fuck is this" hx-get="/scroll" hx-trigger="revealed" hx-swap="afterend"></div>` 
+	time.Sleep(1 * time.Second)
+	newResult := `<div class="h-96 block text-center"><img class="htmx-indicator mx-auto" width="60" height="96" src="/static/bars.svg" alt="where the fuck is this" hx-get="/scroll" hx-trigger="revealed" hx-swap="afterend"></div>`
 	c.String(http.StatusOK, newResult)
 }

@@ -1,23 +1,23 @@
 package main
 
 import (
-	"net/http"
 	"database/sql"
-	"log"
 	"fmt"
-	"time"
-	"os"
-	"github.com/go-sql-driver/mysql"
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
 var db *sql.DB
 
 type Data struct {
-	ID int64
+	ID          int64
 	Temperature string `json:"temperature"`
-	Humidity string `json:"humidity"`
-	Time string `json:"time"`
+	Humidity    string `json:"humidity"`
+	Time        string `json:"time"`
 }
 
 func main() {
@@ -47,7 +47,7 @@ func health(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
-func loadDB() error{
+func loadDB() error {
 	cfg := mysql.Config{
 		User:   os.Getenv("MYSQL_USER"),
 		Passwd: os.Getenv("MYSQL_PASSWORD"),
@@ -55,12 +55,12 @@ func loadDB() error{
 		Addr:   os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT"),
 		DBName: os.Getenv("MYSQL_DATABASE"),
 	}
-	
+
 	var err error
 	maxRetries := 10
 	retryInterval := 5 * time.Second
 
-	for retries :=0; retries < maxRetries; retries++ {
+	for retries := 0; retries < maxRetries; retries++ {
 		db, err = sql.Open("mysql", cfg.FormatDSN())
 		if err != nil {
 			log.Println(err)
@@ -85,12 +85,11 @@ func addData(c *gin.Context) {
 	}
 
 	timestamp, exists := c.Get("Time")
-	if !exists { 
+	if !exists {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Timestamp not found"})
 	}
 
 	newData.Time = fmt.Sprintf("%v", timestamp.(int64))
-	
 
 	err := writeDB(newData)
 	if err != nil {
@@ -154,7 +153,7 @@ func logTimestamp() gin.HandlerFunc {
 	}
 }
 
-func initTable() error{
+func initTable() error {
 	stmt, err := db.Prepare("CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTO_INCREMENT, temperature FLOAT, humidity FLOAT, time INT)")
 	if err != nil {
 		return fmt.Errorf("couldn't prepare init statement: %v", err)
