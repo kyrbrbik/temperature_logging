@@ -31,8 +31,6 @@ func main() {
 
 	r.GET("/refresh", refreshTemperature)
 
-	r.GET("/scroll", infiniteScroll)
-
 	r.Run(":8090")
 }
 
@@ -110,10 +108,4 @@ func refreshTemperature(c *gin.Context) {
 	result := getTemp()
 	time.Sleep(2 * time.Second) //for dramatic effect
 	c.String(http.StatusOK, result+"°C")
-}
-
-func infiniteScroll(c *gin.Context) {
-	time.Sleep(1 * time.Second)
-	newResult := `<div class="h-96 block text-center"><img class="htmx-indicator mx-auto" width="60" height="96" src="/static/bars.svg" alt="where the fuck is this" hx-get="/scroll" hx-trigger="revealed" hx-swap="afterend"></div>`
-	c.String(http.StatusOK, newResult)
 }
