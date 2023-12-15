@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -101,6 +102,13 @@ func addData(c *gin.Context) {
 }
 
 func writeDB(data Data) error {
+	// subtract 3 from temperature to get the real value
+	temperature, err := strconv.ParseFloat(data.Temperature, 32)
+	if err != nil {
+		return fmt.Errorf("couldn't parse temperature: %v", err)
+	}
+	data.Temperature = fmt.Sprintf("%f", temperature-3)
+
 	stmt, err := db.Prepare("INSERT INTO data (temperature, humidity, time) VALUES (?, ?, ?)")
 	if err != nil {
 		return fmt.Errorf("couldn't prepare statement: %v", err)
