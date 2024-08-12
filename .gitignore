@@ -27,3 +27,4 @@ Makefile
 # Exclude sensor code
 sensor/
 
+.env

@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 type Data struct {
@@ -20,6 +22,9 @@ type Data struct {
 }
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("No .env file found")
+	}
 
 	r := gin.Default()
 
@@ -35,14 +40,15 @@ func main() {
 }
 
 func fetchAPI() (string, error) {
-	url := "http://temperature-api.temperature.svc.cluster.local:8080/data/last"
+
+	url := os.Getenv("API_URL")
 
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
