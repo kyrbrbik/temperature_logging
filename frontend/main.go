@@ -98,7 +98,7 @@ func isHot(temp string) string {
 
 func getTemp() string {
 
-	data, err := fetchAPI("/data")
+	data, err := fetchAPI("/data/last")
 	if err != nil {
 		log.Println("Error: ", err)
 	}
