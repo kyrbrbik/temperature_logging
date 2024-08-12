@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	"log"
@@ -12,6 +13,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/buger/jsonparser"
 )
 
 var db *sql.DB
@@ -42,6 +44,7 @@ func main() {
 	r.GET("/data", getData)
 	r.POST("/data", addData)
 	r.GET("/data/last", getLastTempetature)
+	r.GET("/temperature", getCurrentTemperature)
 	r.Run(":8080")
 }
 
@@ -180,4 +183,30 @@ func initTable() error {
 	}
 	fmt.Println(res)
 	return err
+}
+
+func getCurrentTemperature(c *gin.Context) {
+	url := os.Getenv("TEMPERATURE_URL")
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	temperature, dataType, offset, err := jsonparser.Get(body, "current", "temperature_2m")
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(dataType)
+	log.Println(offset) // why is this even here?
+
+	result := string(temperature)
+
+	c.JSON(http.StatusOK, gin.H{"temperature": result})
 }
